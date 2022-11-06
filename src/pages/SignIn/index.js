@@ -1,13 +1,20 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 export default function SignIn() {
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <View style={styles.bg}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
+        enabled
+      >
         <Image style={styles.img} source={require('../../images/Logo.png')} />
         <View style={styles.areaInput}>
           <TextInput
@@ -42,7 +49,7 @@ export default function SignIn() {
         >
           <Text style={styles.textLink}>Criar uma conta</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   )
 }
