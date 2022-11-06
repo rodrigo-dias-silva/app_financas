@@ -1,12 +1,19 @@
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from './../../contexts/auth';
 
 export default function SignIn() {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { user } = useContext(AuthContext);
+
+  function handleLogin() {
+    // alert(user.uid);
+  }
 
   return (
     <View style={styles.bg}>
@@ -39,7 +46,10 @@ export default function SignIn() {
           />
         </View>
 
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={handleLogin}
+        >
           <Text style={styles.textBtn}>Entrar</Text>
         </TouchableOpacity>
 
