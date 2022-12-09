@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, SafeAreaView } from 'react-native';
 
 export default function New() {
   return (
-    <View>
+    <SafeAreaView>
       <Text>New</Text>
-    </View>
+    </SafeAreaView>
   );
 }
