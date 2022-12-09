@@ -18,12 +18,15 @@ export default function Header() {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     marginTop: 15,
     marginBottom: 15,
     width: '90%',
     height: 50
   },
   btn: {
-
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
