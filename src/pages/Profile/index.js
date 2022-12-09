@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { SafeAreaView, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native';
 
 import { AuthContext } from './../../contexts/auth';
+import Header from '../../components/Header';
 
 export default function Profile() {
 
@@ -11,7 +12,8 @@ export default function Profile() {
   const { user, signOut } = useContext(AuthContext)
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header />
       <Text style={styles.name}>
         {user && user.name}
       </Text>
@@ -29,7 +31,7 @@ export default function Profile() {
       >
         <Text style={styles.txtBtn}>Sair</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#131313',
     alignItems: 'center',
-    justifyContent: 'center'
+
   },
   name: {
     textAlign: 'center',
