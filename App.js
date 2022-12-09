@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 console.disableYellowBox = true;
@@ -13,7 +13,7 @@ export default function App() {
     <NavigationContainer>
       <AuthProvider>
         <Routes />
-        <StatusBar style="inverted" />
+        <StatusBar barStyle='light-content' backgroundColor='#131313' />
       </AuthProvider>
     </NavigationContainer>
   );
