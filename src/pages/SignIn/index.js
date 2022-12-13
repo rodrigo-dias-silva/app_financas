@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 10,
     borderRadius: 8,
+    height: 45
   },
   btn: {
     alignItems: "center",
@@ -98,9 +99,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 10,
   },
-  textBtn: {
+  txtBtn: {
     fontSize: 20,
-    color: "#131313",
+    color: "#fff",
+    fontWeight: 'bold'
   },
   link: {
     marginTop: 10,
