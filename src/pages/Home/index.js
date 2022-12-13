@@ -30,7 +30,7 @@ export default function Home() {
 
         <Header />
         <View style={styles.containerUser}>
-          <Text style={styles.name}>Rodrigo</Text>
+          <Text style={styles.name}>{user && user.name}</Text>
           <Text style={styles.cash}>R$ 123,00</Text>
         </View>
         <Text style={styles.title}>Últimas movimentações</Text>
