@@ -1,30 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { Picker as RNPickerSelect } from '@react-native-picker/picker'
-import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { PickerIOS } from '@react-native-picker/picker'
+import React, { useState } from 'react'
 
 export default function Picker({ onChange, tipo }) {
+
   return (
     <View style={styles.container}>
-      <RNPickerSelect
+
+      <PickerIOS
         style={styles.picker}
         onValueChange={(valor) => onChange(valor)}
         selectedValue={tipo}
-        itemStyle={{ color: '#ffffff66' }}
+        itemStyle={{ color: '#fff' }}
       >
-        <RNPickerSelect.Item label='Receita' value='receita' />
-        <RNPickerSelect.Item label='Despesa' value='despesa' />
-      </RNPickerSelect>
+        <PickerIOS.Item label='Receita' value='receita' />
+        <PickerIOS.Item label='Despesa' value='despesa' />
+      </PickerIOS>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     alignItems: 'center',
-    width: '90%',
-    borderRadius: 8,
-
+    width: '100%',
   },
   picker: {
     width: '100%',
