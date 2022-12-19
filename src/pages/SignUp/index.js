@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
 import React, { useState, useContext } from 'react'
 
 import { AuthContext } from '../../contexts/auth'
@@ -8,7 +8,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { signUp } = useContext(AuthContext)
+  const { signUp, loadingAuth } = useContext(AuthContext)
 
   function handleSingUp() {
     signUp(email, password, name)
@@ -57,7 +57,12 @@ export default function SignIn() {
         </View>
 
         <TouchableOpacity style={styles.btn} onPress={handleSingUp}>
-          <Text style={styles.textBtn}>Cadastrar</Text>
+          {
+            loadingAuth ?
+              (<ActivityIndicator size={20} color="#fff" />)
+              :
+              (<Text style={styles.textBtn}>Cadastrar</Text>)
+          }
         </TouchableOpacity>
 
       </KeyboardAvoidingView>
