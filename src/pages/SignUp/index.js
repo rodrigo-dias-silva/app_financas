@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import React, { useState, useContext } from 'react'
 
 import { AuthContext } from '../../contexts/auth'
@@ -16,56 +16,58 @@ export default function SignIn() {
 
   return (
     <View style={styles.bg}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : ''}
-        enabled
-      >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : ''}
+          enabled
+        >
 
-        <View style={styles.areaInput}>
-          <TextInput
-            placeholderTextColor="#ffffff66"
-            style={styles.input}
-            placeholder='Nome'
-            autoCorrect={false}
-            autoCapitalize='none'
-            value={name}
-            onChangeText={(text) => setName(text)}
-          />
-        </View>
-        <View style={styles.areaInput}>
-          <TextInput
-            placeholderTextColor="#ffffff66"
-            style={styles.input}
-            placeholder='E-mail'
-            autoCorrect={false}
-            autoCapitalize='none'
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
-        <View style={styles.areaInput}>
-          <TextInput
-            placeholderTextColor="#ffffff66"
-            style={styles.input}
-            placeholder='Senha'
-            autoCorrect={false}
-            autoCapitalize='none'
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </View>
+          <View style={styles.areaInput}>
+            <TextInput
+              placeholderTextColor="#ffffff66"
+              style={styles.input}
+              placeholder='Nome'
+              autoCorrect={false}
+              autoCapitalize='none'
+              value={name}
+              onChangeText={(text) => setName(text)}
+            />
+          </View>
+          <View style={styles.areaInput}>
+            <TextInput
+              placeholderTextColor="#ffffff66"
+              style={styles.input}
+              placeholder='E-mail'
+              autoCorrect={false}
+              autoCapitalize='none'
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+          </View>
+          <View style={styles.areaInput}>
+            <TextInput
+              placeholderTextColor="#ffffff66"
+              style={styles.input}
+              placeholder='Senha'
+              autoCorrect={false}
+              autoCapitalize='none'
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+            />
+          </View>
 
-        <TouchableOpacity style={styles.btn} onPress={handleSingUp}>
-          {
-            loadingAuth ?
-              (<ActivityIndicator size={20} color="#fff" />)
-              :
-              (<Text style={styles.textBtn}>Cadastrar</Text>)
-          }
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={handleSingUp}>
+            {
+              loadingAuth ?
+                (<ActivityIndicator size={20} color="#fff" />)
+                :
+                (<Text style={styles.textBtn}>Cadastrar</Text>)
+            }
+          </TouchableOpacity>
 
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
