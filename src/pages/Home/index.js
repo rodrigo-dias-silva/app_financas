@@ -1,28 +1,47 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { AuthContext } from '../../contexts/auth'
 import Header from './../../components/Header';
 import List from '../../components/List';
+import firebase from './../../services/firebaseConnection';
+import { format } from 'date-fns';
 
 export default function Home() {
 
-  const [historico, setHistorico] = useState([
-    { key: '1', type: 'receita', value: 1200 },
-    { key: '2', type: 'despesa', value: 200 },
-    { key: '3', type: 'despesa', value: 1000 },
-    { key: '4', type: 'receita', value: 1200 },
-    { key: '5', type: 'receita', value: 200 },
-    { key: '6', type: 'receita', value: 100 },
-    { key: '7', type: 'despesa', value: 600 },
-    { key: '8', type: 'receita', value: 10 },
-    { key: '9', type: 'despesa', value: 10 },
-    { key: '10', type: 'receita', value: 10 },
-    { key: '11', type: 'despesa', value: 10 },
-    { key: '12', type: 'despesa', value: 110 },
-  ])
+  const [historico, setHistorico] = useState([])
+  const [saldo, setSaldo] = useState(0)
 
   const { user } = useContext(AuthContext);
+  const uid = user && user.uid
+
+  useEffect(() => {
+    async function loadList() {
+      await firebase.database().ref('users').child(uid).on('value', (snapshot) => {
+        setSaldo(snapshot.val().saldo)
+      })
+
+      await firebase.database().ref('historico')
+        .child(uid)
+        .orderByChild('date').equalTo(format(new Date, 'dd/MM/yy'))
+        .limitToLast(10).on('value', (snapshot) => {
+          setHistorico([])
+
+          snapshot.forEach((childItem) => {
+            let list = {
+              key: childItem.key,
+              type: childItem.val().type,
+              value: childItem.val().value
+            }
+
+            setHistorico(oldArray => [...oldArray, list].reverse())
+          })
+        })
+    }
+
+    loadList();
+
+  }, [])
 
   return (
     <SafeAreaView style={styles.bg}>
@@ -31,7 +50,7 @@ export default function Home() {
         <Header />
         <View style={styles.containerUser}>
           <Text style={styles.name}>{user && user.name}</Text>
-          <Text style={styles.cash}>R$ 123,00</Text>
+          <Text style={styles.cash}>R$ {saldo.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}</Text>
         </View>
         <Text style={styles.title}>Últimas movimentações</Text>
 
