@@ -1,11 +1,80 @@
-import React, { useState } from 'react';
-import { Text, SafeAreaView, View, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useContext, useState } from 'react';
+import {
+  Text,
+  SafeAreaView,
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import { format } from 'date-fns';
+
 import Picker from '../../components/Picker';
-import Header from './../../components/Header/index';
+import Header from './../../components/Header';
+
+import firebase from './../../services/firebaseConnection';
+import { AuthContext } from './../../contexts/auth';
 
 export default function New() {
+  const navigation = useNavigation()
+
   const [value, setValue] = useState('')
-  const [type, setType] = useState('receita')
+  const [type, setType] = useState('Receita')
+
+  const { user: usuario } = useContext(AuthContext)
+
+  function handleSubmit() {
+    Keyboard.dismiss()
+    if (isNaN(parseFloat(value)) || type === null) {
+      alert('Preencha todos os campos!')
+      return;
+    }
+
+    Alert.alert(
+      'Confirmando dados',
+      `Tipo ${type} - Valor: ${parseFloat(value)}`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel'
+        },
+        {
+          text: 'Continuar',
+          onPress: () => handleAdd()
+        }
+      ]
+    )
+  }
+
+  async function handleAdd() {
+    let uid = usuario.uid
+
+    let key = firebase.database().ref('historico').child(uid).push().key;
+
+    firebase.database().ref('historico').child(uid).child(key).set({
+      type: type,
+      value: parseFloat(value),
+      date: format(new Date(), 'dd/MM/yy')
+    })
+
+    let user = firebase.database().ref('users').child(uid);
+
+    await user.once('value').then((snapshot) => {
+      let saldo = parseFloat(snapshot.val().saldo)
+
+      type === 'despesa' ? saldo -= parseFloat(value) : saldo += parseFloat(value)
+
+      user.child('saldo').set(saldo)
+    })
+    Keyboard.dismiss()
+    setValue('')
+    navigation.navigate('Home')
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -26,7 +95,10 @@ export default function New() {
 
           <Picker onChange={setType} tipo={type} />
 
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={handleSubmit}
+          >
             <Text style={styles.txtBtn}>Registrar</Text>
           </TouchableOpacity>
         </View>
