@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from './../../contexts/auth';
@@ -9,7 +9,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { signIn } = useContext(AuthContext);
+  const { signIn, loadingAuth } = useContext(AuthContext);
 
   function handleLogin() {
     signIn(email, password)
@@ -50,7 +50,12 @@ export default function SignIn() {
           style={styles.btn}
           onPress={handleLogin}
         >
-          <Text style={styles.textBtn}>Entrar</Text>
+          {
+            loadingAuth ?
+              (<ActivityIndicator size={20} color="#fff" />)
+              :
+              (<Text style={styles.textBtn}>Entrar</Text>)
+          }
         </TouchableOpacity>
 
         <TouchableOpacity
