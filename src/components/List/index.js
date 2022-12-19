@@ -16,7 +16,7 @@ export default function List({ data }) {
         </View>
       </View>
       <Text style={styles.valueTxt}>
-        R$ {data.value}
+        R$ {data.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
       </Text>
     </View>
   )
