@@ -1,29 +1,34 @@
-import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
+import { Foundation } from '@expo/vector-icons';
 
 import { AuthContext } from '../../contexts/auth'
 import Header from './../../components/Header';
 import List from '../../components/List';
 import firebase from './../../services/firebaseConnection';
 import { format } from 'date-fns';
+import DatePicker from '../../components/DatePicker';
 
 export default function Home() {
 
   const [historico, setHistorico] = useState([])
   const [saldo, setSaldo] = useState(0)
+  const [show, setShow] = useState(false)
+
+  const [newDate, setNewDate] = useState(new Date())
 
   const { user } = useContext(AuthContext);
   const uid = user && user.uid
 
   useEffect(() => {
-    async function loadList() {
-      await firebase.database().ref('users').child(uid).on('value', (snapshot) => {
+    function loadList() {
+      firebase.database().ref('users').child(uid).on('value', (snapshot) => {
         setSaldo(snapshot.val().saldo)
       })
 
-      await firebase.database().ref('historico')
+      firebase.database().ref('historico')
         .child(uid)
-        .orderByChild('date').equalTo(format(new Date, 'dd/MM/yy'))
+        .orderByChild('date').equalTo(format(newDate, 'dd/MM/yy'))
         .limitToLast(10).on('value', (snapshot) => {
           setHistorico([])
 
@@ -42,7 +47,7 @@ export default function Home() {
 
     loadList();
 
-  }, [])
+  }, [newDate])
 
   function handleDelete(data) {
 
@@ -76,6 +81,19 @@ export default function Home() {
       })
   }
 
+  function handleShowPicker() {
+    setShow(true)
+  }
+
+  function handleClose() {
+    setShow(false)
+  }
+
+  function dateChange(date) {
+    setShow(Platform.OS === 'ios')
+    setNewDate(date)
+  }
+
   return (
     <SafeAreaView style={styles.bg}>
       <View style={styles.container}>
@@ -85,7 +103,13 @@ export default function Home() {
           <Text style={styles.name}>{user && user.name}</Text>
           <Text style={styles.cash}>R$ {saldo.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}</Text>
         </View>
-        <Text style={styles.title}>Últimas movimentações</Text>
+
+        <View style={styles.containerFilter}>
+          <TouchableOpacity style={styles.btnFilter} onPress={handleShowPicker}>
+            <Foundation name='calendar' color='#fff' size={30} />
+          </TouchableOpacity>
+          <Text style={styles.title}>Últimas movimentações</Text>
+        </View>
 
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -94,6 +118,14 @@ export default function Home() {
           renderItem={({ item }) => (<List data={item} deleteItem={handleDelete} />)}
           style={styles.list}
         />
+
+        {show && (
+          <DatePicker
+            onClose={handleClose}
+            date={newDate}
+            onChange={dateChange}
+          />
+        )}
 
       </View>
     </SafeAreaView>
@@ -126,7 +158,15 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#00b94a',
+    marginLeft: 5
+  },
+  containerFilter: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10
+  },
+  btnFilter: {
+    marginHorizontal: 10,
   },
   list: {
     paddingTop: 15,
