@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 
 import { AuthContext } from '../../contexts/auth'
@@ -31,7 +31,8 @@ export default function Home() {
             let list = {
               key: childItem.key,
               type: childItem.val().type,
-              value: childItem.val().value
+              value: childItem.val().value,
+              date: childItem.val().date
             }
 
             setHistorico(oldArray => [...oldArray, list].reverse())
@@ -42,6 +43,38 @@ export default function Home() {
     loadList();
 
   }, [])
+
+  function handleDelete(data) {
+
+    Alert.alert(
+      'Cuidado Atenção!',
+      `Você deseja excluir ${data.type} - Valor: ${data.value}`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel'
+        },
+        {
+          text: 'Excluir',
+          onPress: () => handleDelSuccess(data)
+        }
+      ]
+    )
+  }
+
+  async function handleDelSuccess(data) {
+    await firebase.database().ref('historico').child(uid).child(data.key).remove()
+      .then(() => {
+        let saldoAtual = saldo
+
+        data.type === 'despesa' ? saldoAtual += parseFloat(data.value) : saldoAtual -= parseFloat(data.value)
+
+        firebase.database().ref('users').child(uid).child('saldo').set(saldoAtual)
+      })
+      .catch((err) => {
+        alert(err)
+      })
+  }
 
   return (
     <SafeAreaView style={styles.bg}>
@@ -58,7 +91,7 @@ export default function Home() {
           showsVerticalScrollIndicator={false}
           data={historico}
           keyExtractor={item => item.key}
-          renderItem={({ item }) => (<List data={item} />)}
+          renderItem={({ item }) => (<List data={item} deleteItem={handleDelete} />)}
           style={styles.list}
         />
 
