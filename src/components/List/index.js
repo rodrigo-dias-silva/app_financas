@@ -1,24 +1,26 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
 
-export default function List({ data }) {
+export default function List({ data, deleteItem }) {
   return (
-    <View style={[styles.container, styles.shadowContainer]}>
-      <View style={styles.viewType}>
-        <View style={[styles.iconView, { backgroundColor: data.type === 'despesa' ? '#c62c36' : '#049301' }]}>
-          <Feather
-            name={data.type === 'despesa' ? 'arrow-down' : 'arrow-up'}
-            color={'#fff'}
-            size={20}
-          />
-          <Text style={styles.typeTxt}>{data.type === 'despesa' ? 'despesa' : 'receita'}</Text>
+    <TouchableWithoutFeedback onLongPress={() => deleteItem(data)}>
+      <View style={[styles.container, styles.shadowContainer]}>
+        <View style={styles.viewType}>
+          <View style={[styles.iconView, { backgroundColor: data.type === 'despesa' ? '#c62c36' : '#049301' }]}>
+            <Feather
+              name={data.type === 'despesa' ? 'arrow-down' : 'arrow-up'}
+              color={'#fff'}
+              size={20}
+            />
+            <Text style={styles.typeTxt}>{data.type === 'despesa' ? 'despesa' : 'receita'}</Text>
+          </View>
         </View>
+        <Text style={styles.valueTxt}>
+          R$ {data.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
+        </Text>
       </View>
-      <Text style={styles.valueTxt}>
-        R$ {data.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
-      </Text>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 
