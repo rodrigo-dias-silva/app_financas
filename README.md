@@ -6,3 +6,13 @@ Esse projeto tem como intuito ser uma sulução que auxilie pessoas no controle 
 
 ## Sobre o projeto
 
+O projeto foi construido com React Native e utilizado Firebase para autenticaçao e banco de dados.
+
+O App conta com as seguintes páginas:
+
+- Entrar
+- Cadastro
+- Início
+- Registrar
+- Perfil
+
