@@ -64,7 +64,7 @@ export default function SignIn() {
               loadingAuth ?
                 (<ActivityIndicator size={20} color="#fff" />)
                 :
-                (<Text style={styles.textBtn}>Entrar</Text>)
+                (<Text style={styles.txtBtn}>Entrar</Text>)
             }
           </TouchableOpacity>
 
