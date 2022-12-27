@@ -28,7 +28,7 @@ function AppRoutes() {
         }
       }}
     >
-      <AppDrawer.Screen name="Home" component={Home} />
+      <AppDrawer.Screen name="Início" component={Home} />
       <AppDrawer.Screen name="Registrar" component={New} />
       <AppDrawer.Screen name="Perfil" component={Profile} />
     </AppDrawer.Navigator>
