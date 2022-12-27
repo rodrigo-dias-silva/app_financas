@@ -22,7 +22,7 @@ export default function SignIn() {
           behavior={Platform.OS === 'ios' ? 'padding' : ''}
           enabled
         >
-
+          <Text style={styles.title}>Crie sua conta</Text>
           <View style={styles.areaInput}>
             <TextInput
               placeholderTextColor="#ffffff66"
@@ -81,6 +81,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 50
+  },
+  title: {
+    fontSize: 28,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginBottom: 30
   },
   img: {
     marginBottom: 30
@@ -108,7 +115,8 @@ const styles = StyleSheet.create({
   },
   textBtn: {
     fontSize: 20,
-    color: "#131313",
+    color: "#fff",
+    fontWeight: 'bold'
   },
   link: {
     marginTop: 10,
